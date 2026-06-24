@@ -31,7 +31,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "Select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} Where @{pipeline().parameters.cdc_col} > '@{if(empty(pipeline().parameters.from_date),activity('Lookup').output.value[0].cdc,pipeline().parameters.from_date)}'",
+							"value": "Select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} Where @{pipeline().parameters.cdc_col} > '@{if(empty(pipeline().parameters.from_date),activity('Lookup').output.value[0].cdc,pipeline().parameters.from_date)}'\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -109,8 +109,8 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "bronze",
-							"folder": "cdc",
-							"file": "cdc.json"
+							"folder": "cdc2",
+							"file": "cdc2.json"
 						}
 					},
 					"firstRowOnly": false
