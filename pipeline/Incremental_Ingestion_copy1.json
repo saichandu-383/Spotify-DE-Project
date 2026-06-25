@@ -12,7 +12,20 @@
 						{
 							"name": "AzureSQL_To_Lake",
 							"type": "Copy",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Lookup",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "current",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -25,7 +38,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "Select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} Where @{pipeline().parameters.cdc_col} > '@{if(empty(pipeline().parameters.from_date),activity('Lookup').output.value[0].cdc,pipeline().parameters.from_date)}'\n",
+										"value": "Select * from @{item().schema}.@{item().table} Where @{item().cdc_col} > '@{if(empty(item().from_date),activity('Lookup').output.value[0].cdc,item().from_date)}'\n",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -63,11 +76,11 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@pipeline().parameters.table",
+											"value": "@{item().table}",
 											"type": "Expression"
 										},
 										"file": {
-											"value": "@concat(pipeline().parameters.table,' ',variables('current'))",
+											"value": "@concat(item().table,' ',variables('current'))",
 											"type": "Expression"
 										}
 									}
@@ -104,7 +117,7 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@{pipeline().parameters.table}",
+											"value": "@{item().table}",
 											"type": "Expression"
 										},
 										"file": "cdc.json"
@@ -133,7 +146,14 @@
 						{
 							"name": "If  Incremental Data",
 							"type": "IfCondition",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "AzureSQL_To_Lake",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
@@ -160,11 +180,11 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@pipeline().parameters.table",
+														"value": "@{item().table}",
 														"type": "Expression"
 													},
 													"file": {
-														"value": "@concat(pipeline().parameters.table,' ',variables('current'))",
+														"value": "@concat(item().table,'_',variables('current'))",
 														"type": "Expression"
 													}
 												}
@@ -237,7 +257,7 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@pipeline().parameters.table",
+														"value": "@{item().table}",
 														"type": "Expression"
 													},
 													"file": "empty.json"
@@ -251,7 +271,7 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@pipeline().parameters.table",
+														"value": "@{item().table}",
 														"type": "Expression"
 													},
 													"file": "cdc.json"
@@ -280,7 +300,7 @@
 												{
 													"type": "Query",
 													"text": {
-														"value": "Select MAX(@{pipeline().parameters.cdc_col}) as cdc from\n@{pipeline().parameters.schema}.@{pipeline().parameters.table}",
+														"value": "Select MAX(@{item().cdc_col}) as cdc from\n@{item().schema}.@{item().table}",
 														"type": "Expression"
 													}
 												}
