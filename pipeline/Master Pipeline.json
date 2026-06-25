@@ -24,7 +24,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "Incremental_Ingestion2",
+									"referenceName": "Clone Ingestion",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true,
@@ -58,19 +58,19 @@
 				"defaultValue": [
 					{
 						"schema": "dbo",
-						"table": "DimUser_2",
+						"table": "DimUser",
 						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
 						"schema": "dbo",
-						"table": "DimArtist_2",
+						"table": "DimArtist",
 						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
 						"schema": "dbo",
-						"table": "DimTrack_2",
+						"table": "DimTrack",
 						"cdc_col": "updated_at",
 						"from_date": ""
 					}

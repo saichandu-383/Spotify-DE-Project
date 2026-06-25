@@ -1,5 +1,5 @@
 {
-	"name": "Incremental_Ingestion2",
+	"name": "Clone Ingestion",
 	"properties": {
 		"activities": [
 			{
