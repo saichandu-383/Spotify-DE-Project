@@ -109,8 +109,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "bronze",
-							"folder": "cdc2",
-							"file": "cdc2.json"
+							"folder": {
+								"value": "@{pipeline().parameters.table}",
+								"type": "Expression"
+							},
+							"file": "cdc.json"
 						}
 					},
 					"firstRowOnly": false
@@ -246,7 +249,10 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "bronze",
-										"folder": "cdc2",
+										"folder": {
+											"value": "@pipeline().parameters.table",
+											"type": "Expression"
+										},
 										"file": "empty.json"
 									}
 								}
@@ -257,8 +263,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "bronze",
-										"folder": "cdc2",
-										"file": "cdc2.json"
+										"folder": {
+											"value": "@pipeline().parameters.table",
+											"type": "Expression"
+										},
+										"file": "cdc.json"
 									}
 								}
 							]
