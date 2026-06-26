@@ -1,9 +1,9 @@
 {
-	"name": "Incremental_Ingestion - COPY",
+	"name": "Incremental_Ingestion - Loop",
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEach1",
+				"name": "ForEach",
 				"type": "ForEach",
 				"dependsOn": [],
 				"userProperties": [],
